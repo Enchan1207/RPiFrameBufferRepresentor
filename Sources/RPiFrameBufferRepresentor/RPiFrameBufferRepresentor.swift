@@ -24,33 +24,11 @@ final class RPiFrameBufferRepresentor{
         // *.binを取り出す
         let screenshotPaths = files.filter {$0.hasSuffix(".bin")}
         
-        // MARK: - 書き散らしてるだけのテスト実装
+        // 今のところは一枚だけ処理して終わり
         guard let path = screenshotPaths.first else {return 1}
         
         // バイナリを取得
         guard let binary = try? Data(contentsOf: .init(fileURLWithPath: path)) else {return 1}
-        
-        struct Pixel{
-            let R: UInt8
-            let G: UInt8
-            let B: UInt8
-            let A: UInt8
-            
-            init(R: UInt8, G: UInt8, B: UInt8, A: UInt8) {
-                self.R = R
-                self.G = G
-                self.B = B
-                self.A = A
-            }
-            
-            init?(data: Data) {
-                if data.count != 4 {
-                    return nil
-                }
-                
-                self.init(R: data[0], G: data[1], B: data[2], A: data[3])
-            }
-        }
         
         // 4bit(RGBAのLE)ずつスライス
         let binaryLength = binary.count
