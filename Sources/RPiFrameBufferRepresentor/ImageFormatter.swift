@@ -1,6 +1,6 @@
 //
-//  ImageFormatter.swift - CIImageからDataを生成
-//  RPiFrameBufferRepresentor
+//  ImageFormatter.swift
+//  CIImageからDataを生成
 //
 //  Created by EnchantCode on 2021/02/11.
 //

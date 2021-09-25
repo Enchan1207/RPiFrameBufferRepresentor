@@ -1,6 +1,6 @@
 //
 //  ImageDrawer.swift
-//  RPiFrameBufferRepresentor
+//  画像処理
 //
 //  Created by EnchantCode on 2021/09/25.
 //
