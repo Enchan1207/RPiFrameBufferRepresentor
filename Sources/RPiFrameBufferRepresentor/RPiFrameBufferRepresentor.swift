@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import AppKit
 
 final class RPiFrameBufferRepresentor{
     
@@ -27,20 +28,16 @@ final class RPiFrameBufferRepresentor{
         // 今のところは一枚だけ処理して終わり
         guard let path = screenshotPaths.first else {return 1}
         
-        // バイナリを取得
+        // バイナリを取得し
         guard let binary = try? Data(contentsOf: .init(fileURLWithPath: path)) else {return 1}
         
-        // 4bit(RGBAのLE)ずつスライス
-        let binaryLength = binary.count
-        let splitRange = 0..<(binaryLength / 4)
+        // バッファを生成
+        let width: UInt = 1920
+        let height: UInt = 1088
         
-        let splitBinaries = splitRange.map { offset -> Data in
-            let start = binary.startIndex.advanced(by: offset * 4)
-            let end = start.advanced(by: 4)
-            return binary.subdata(in: start..<end)
-        }
-        let pixels: [Pixel] = splitBinaries.map {.init(data: $0)!}
+        guard let frameBuffer = FrameBufferDecoder.decode(from: binary, width: width, height: height) else {return 1}
         
+        print(frameBuffer)
         
         return 0
     }

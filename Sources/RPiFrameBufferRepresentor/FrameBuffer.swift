@@ -8,7 +8,8 @@
 import Foundation
 
 /// structure handling frame-buffer of Raspberry Pi.
-struct FrameBuffer {
+struct FrameBuffer: CustomStringConvertible {
+    
     let width: UInt
     let height: UInt
     
@@ -39,5 +40,11 @@ struct FrameBuffer {
     init(width: UInt, height: UInt) {
         let pixels: [Pixel] = (0..<(width*height)).map {_ in .init(R: 0, G: 0, B: 0, A: 0)}
         self.init(width: width, height: height, pixels: pixels)!
+    }
+    
+    var description: String {
+        get{
+            return "FrameBuffer(width: \(width), height: \(height))"
+        }
     }
 }

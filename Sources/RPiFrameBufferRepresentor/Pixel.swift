@@ -38,8 +38,7 @@ struct Pixel{
             return nil
         }
         
-        let _data = data.reversed()
-        self.init(R: _data[0], G: _data[1], B: _data[2], A: _data[3])
+        self.init(R: data[3], G: data[2], B: data[1], A: data[0])
     }
 }
 
