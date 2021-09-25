@@ -32,12 +32,19 @@ final class RPiFrameBufferRepresentor{
         guard let binary = try? Data(contentsOf: .init(fileURLWithPath: path)) else {return 1}
         
         // バッファを生成
-        let width: UInt = 1920
-        let height: UInt = 1088
+        // 1920*1088
+        let width: UInt = 1088
+        let height: UInt = 1920
         
         guard let frameBuffer = FrameBufferDecoder.decode(from: binary, width: width, height: height) else {return 1}
         
-        print(frameBuffer)
+        // 画像に変換
+        guard let cgImage = ImageRepresentor.convert(from: frameBuffer) else {return 1}
+        
+        // PNG形式で保存
+        let pngRepresentation = ImageFormatter().generatePNGImageData(image: .init(cgImage: cgImage))
+        fileManager.createFile(atPath: "~/Desktop/test.png".replacingOccurrences(of: "~", with: NSHomeDirectory()), contents: pngRepresentation, attributes: nil)
+        
         
         return 0
     }

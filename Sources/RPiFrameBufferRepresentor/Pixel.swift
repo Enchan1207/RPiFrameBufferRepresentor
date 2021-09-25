@@ -32,13 +32,21 @@ struct Pixel{
     
     /// initalize Pixel with Data.
     /// - Parameters:
-    ///    - data: four-bytes long Data object. color-component order is A, B, G, R.
+    ///    - data: four-bytes long Data object. color-component order is R, G, B, A
     init?(data: Data) {
         if data.count != 4 {
             return nil
         }
         
-        self.init(R: data[3], G: data[2], B: data[1], A: data[0])
+        self.init(R: data[0], G: data[1], B: data[2], A: data[3])
+    }
+    
+    /// return CGColor representation.
+    var colorRepresentation: CGColor {
+        get{
+            let ratio = {(c: UInt8) -> CGFloat in CGFloat(c) / 255.0}
+            return .init(red: ratio(R), green: ratio(G), blue: ratio(B), alpha: ratio(A))
+        }
     }
 }
 
