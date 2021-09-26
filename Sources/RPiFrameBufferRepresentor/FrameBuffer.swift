@@ -13,7 +13,7 @@ struct FrameBuffer: CustomStringConvertible {
     let width: UInt
     let height: UInt
     
-    let pixels: [Pixel]
+    let binary: NSData
     
     
     /// Initialize the FrameBuffer by specifying the width, height and pixels.
@@ -22,15 +22,15 @@ struct FrameBuffer: CustomStringConvertible {
     ///   - width: frame buffer width.
     ///   - height: frame buffer height.
     ///   - pixels: frame buffer pixels.
-    init?(width: UInt, height: UInt, pixels: [Pixel]) {
+    init?(width: UInt, height: UInt, binary: NSData) {
         // ピクセル数と幅/高さが合わない場合は初期化に失敗する
-        if pixels.count != width * height{
+        if binary.count != width * height * 4{
             return nil
         }
         
         self.width = width
         self.height = height
-        self.pixels = pixels
+        self.binary = binary
     }
     
     /// Initialize the FrameBuffer by specifying the width and height. all pixels are filled with transparent.
@@ -38,8 +38,8 @@ struct FrameBuffer: CustomStringConvertible {
     ///   - width: frame buffer width.
     ///   - height: frame buffer height.
     init(width: UInt, height: UInt) {
-        let pixels: [Pixel] = (0..<(width*height)).map {_ in .init(R: 0, G: 0, B: 0, A: 0)}
-        self.init(width: width, height: height, pixels: pixels)!
+        let binary: NSData = .init(data: .init(count: Int(width * height) * 4))
+        self.init(width: width, height: height, binary: binary)!
     }
     
     var description: String {

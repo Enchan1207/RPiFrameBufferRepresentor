@@ -36,7 +36,7 @@ final class RPiFrameBufferRepresentor{
         let width: UInt = 1088
         let height: UInt = 1920
         
-        guard let frameBuffer = FrameBufferDecoder.decode(from: binary, width: width, height: height) else {return 1}
+        guard let frameBuffer = FrameBuffer(width: width, height: height, binary: .init(data: binary)) else {return 2}
         
         // 画像に変換
         guard let cgImage = ImageRepresentor.convert(from: frameBuffer) else {return 1}

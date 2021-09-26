@@ -16,24 +16,18 @@ class ImageRepresentor{
     static func convert(from buffer: FrameBuffer) -> CGImage? {
         
         // CGContext作って
-        guard let cgContext: CGContext = .init(data: nil, width: Int(buffer.width), height: Int(buffer.height), bitsPerComponent: 8, bytesPerRow: Int(buffer.width) * 4, space: .init(name: CGColorSpace.sRGB)!, bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue) else {return nil}
+        let dataPointer: UnsafeRawPointer = buffer.binary.bytes
+        let colorSpace: CFString = CGColorSpace.sRGB
+        let bitmapInfo: UInt32 = CGImageAlphaInfo.noneSkipFirst.rawValue | CGImageByteOrderInfo.order32Little.rawValue
         
-        // ピクセルをContextに配置していく
-        for x in 0..<buffer.width{
-            for y in 0..<buffer.height{
-                let x_ = Int(x)
-                let y_ = Int(buffer.height - 1 - y) // 座標系の吸収(AppKitは左下が0, 0 )
-                
-                let pos: Int = Int(y * buffer.width + x)
-                let pixel = buffer.pixels[pos]
-                
-                cgContext.setFillColor(pixel.colorRepresentation)
-                cgContext.fill(.init(x: x_, y: y_, width: 1, height: 1))
-            }
-        }
+        guard let cgContext: CGContext = .init(data: .init(mutating: dataPointer),
+                                               width: Int(buffer.width), height: Int(buffer.height),
+                                               bitsPerComponent: 8, bytesPerRow: Int(buffer.width * 4),
+                                        space: .init(name: colorSpace)!,
+                                             bitmapInfo: bitmapInfo) else {return nil}
         
-        guard let cgImage = cgContext.makeImage() else {return nil}
-        return cgImage
+        // 画像生成
+        return cgContext.makeImage()
     }
     
 }
