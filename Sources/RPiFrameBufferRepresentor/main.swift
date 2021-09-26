@@ -9,7 +9,7 @@ import Foundation
 import CoreImage
 import ArgumentParser
 
-struct RPiFrameBufferRepresentor: ParsableCommand {
+struct fbconv: ParsableCommand {
     
     @Argument(help: "input file path. NOTE: Please DO NOT specify /dev/fb0 directly.", completion: .file())
     var input: String
@@ -85,4 +85,4 @@ struct RPiFrameBufferRepresentor: ParsableCommand {
     
 }
 
-RPiFrameBufferRepresentor.main()
+fbconv.main()
